@@ -1,0 +1,15 @@
+# Firebase Credentials (DO NOT UPLOAD)
+serviceAccountKey.json  
+
+# API Keys & Config Files
+config.json  
+.env  
+
+# Compiled & Cache Files
+__pycache__/  
+*.pyc  
+
+# Logs & Debugging Files
+logs/  
+*.log  
+debug.log  
