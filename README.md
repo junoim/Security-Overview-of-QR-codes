@@ -22,7 +22,6 @@ This **terminal-based QR Code Security Scanner** detects **fraudulent, malicious
 This section is **currently under development**. Below are the initial setup steps:  
 
 ### 1️⃣ Clone the Repository  
-```bash
 git clone https://github.com/yourusername/qr-code-security-scanner.git
 cd qr-code-security-scanner
 <br>
@@ -30,7 +29,6 @@ pip install -r requirements.txt
 <br>
 
 #### **🔹 Example for Usage Guide**  
-```markdown
 ## 🔹 Usage (🚧 Work in Progress)  
 Currently, the project is under development. In the final version, users will be able to:  
 
@@ -39,16 +37,13 @@ Currently, the project is under development. In the final version, users will be
 ✅ Store scan history in Firebase  
 
 A **basic scanning script** can be run with:  
-```bash
 python qr_scanner.py
 <br>
-
+<br>
 #### **🔹 Example for Project Structure**  
-```markdown
 ## 📁 Project Structure (🚧 Will be Updated)  
 The project structure is evolving. Here’s the current organization:  
-
-```bash
+<br>
 qr-code-security-scanner/
 │── data/                 # Sample QR codes (Planned)
 │── models/               # AI model for fraud detection (Upcoming)
@@ -58,9 +53,8 @@ qr-code-security-scanner/
 │── README.md             # Documentation
 │── requirements.txt      # Dependencies
 <br>
-
+<br>
 #### **🔹 Example for Future Improvements**  
-```markdown
 ## 🚀 Future Improvements  
 🔹 Improve AI model accuracy with more training data.  
 🔹 Add a **real-time monitoring feature** for tracking threats.  
