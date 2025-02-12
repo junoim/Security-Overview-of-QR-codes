@@ -40,10 +40,13 @@ A **basic scanning script** can be run with:
 python qr_scanner.py
 <br>
 <br>
+
 #### **🔹 Example for Project Structure**  
+```markdown
 ## 📁 Project Structure (🚧 Will be Updated)  
 The project structure is evolving. Here’s the current organization:  
-<br>
+
+```bash
 qr-code-security-scanner/
 │── data/                 # Sample QR codes (Planned)
 │── models/               # AI model for fraud detection (Upcoming)
@@ -52,8 +55,7 @@ qr-code-security-scanner/
 │   ├── api_check.py      # API integrations (Planned)
 │── README.md             # Documentation
 │── requirements.txt      # Dependencies
-<br>
-<br>
+
 #### **🔹 Example for Future Improvements**  
 ## 🚀 Future Improvements  
 🔹 Improve AI model accuracy with more training data.  
