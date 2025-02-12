@@ -22,10 +22,14 @@ This **terminal-based QR Code Security Scanner** detects **fraudulent, malicious
 This section is **currently under development**. Below are the initial setup steps:  
 
 ### 1️⃣ Clone the Repository  
+```
+
 git clone https://github.com/yourusername/qr-code-security-scanner.git
 cd qr-code-security-scanner
-<br>
+
 pip install -r requirements.txt
+```
+
 <br>
 
 #### **🔹 Example for Usage Guide**  
@@ -42,11 +46,10 @@ python qr_scanner.py
 <br>
 
 #### **🔹 Example for Project Structure**  
-```markdown
 ## 📁 Project Structure (🚧 Will be Updated)  
 The project structure is evolving. Here’s the current organization:  
+```
 
-```bash
 qr-code-security-scanner/
 │── data/                 # Sample QR codes (Planned)
 │── models/               # AI model for fraud detection (Upcoming)
@@ -55,6 +58,8 @@ qr-code-security-scanner/
 │   ├── api_check.py      # API integrations (Planned)
 │── README.md             # Documentation
 │── requirements.txt      # Dependencies
+```
+
 
 #### **🔹 Example for Future Improvements**  
 ## 🚀 Future Improvements  
@@ -72,13 +77,22 @@ This project is licensed under the **MIT License** – feel free to use and modi
 
 ## 👥 Contributors  
 
-🚀 **Shradha Mohanty** – Project Lead  // **Github**- https://github.com/junoim 
+🚀 **Shradha Mohanty** – Project Lead 
+<br>
+[**Github**]- (https://github.com/junoim) 
+<br>
 📧 **Email** - shradhamohanty790@gmail.com
-🔗 **Linkedin** - https://www.linkedin.com/in/shradha-mohanty-031855250/
-
-🚀 **Swastisikha Pradhan** – Co-Developer  // **Github**-https://github.com/Swasti20-coding
+<br>
+🔗 [**Linkedin**] - (https://www.linkedin.com/in/shradha-mohanty-031855250/)
+<br>
+<br>
+🚀 **Swastisikha Pradhan** – Co-Developer  // 
+<br>
+[**Github**]-(https://github.com/Swasti20-coding)
+<br>
 📧 **Email** - pradhanswastishika@gmail.com
-🔗 **Linkedin** - https://www.linkedin.com/in/swastisikha-pradhan-83a913296/
+<br>
+🔗 [**Linkedin**] - (https://www.linkedin.com/in/swastisikha-pradhan-83a913296/)
 
 
 
