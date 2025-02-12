@@ -79,20 +79,20 @@ This project is licensed under the **MIT License** – feel free to use and modi
 
 🚀 **Shradha Mohanty** – Project Lead 
 <br>
-[**Github**]- (https://github.com/junoim) 
+[**Github**]- https://github.com/junoim
 <br>
 📧 **Email** - shradhamohanty790@gmail.com
 <br>
-🔗 [**Linkedin**] - (https://www.linkedin.com/in/shradha-mohanty-031855250/)
+🔗 [**Linkedin**] - https://www.linkedin.com/in/shradha-mohanty-031855250/
 <br>
 <br>
-🚀 **Swastisikha Pradhan** – Co-Developer  // 
+🚀 **Swastisikha Pradhan** – Co-Developer  
 <br>
-[**Github**]-(https://github.com/Swasti20-coding)
+[**Github**]-https://github.com/Swasti20-coding
 <br>
 📧 **Email** - pradhanswastishika@gmail.com
 <br>
-🔗 [**Linkedin**] - (https://www.linkedin.com/in/swastisikha-pradhan-83a913296/)
+🔗 [**Linkedin**] - https://www.linkedin.com/in/swastisikha-pradhan-83a913296/
 
 
 
