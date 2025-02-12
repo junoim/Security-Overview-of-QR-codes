@@ -87,7 +87,6 @@ This project is licensed under the **MIT License** – feel free to use and modi
 <br>
 <br>
 🚀 **Swastisikha Pradhan** – Co-Developer  
-<br>
 [**Github**]-https://github.com/Swasti20-coding
 <br>
 📧 **Email** - pradhanswastishika@gmail.com
