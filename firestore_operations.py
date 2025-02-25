@@ -120,3 +120,24 @@ def check_url_safety(url):
     db.collection("urls").document(url).set({"status": status})
     
     return status
+
+import base64
+from google.cloud import firestore
+
+db = firestore.Client()
+
+def encode_url(url):
+    """Encodes the URL to make it Firestore-safe."""
+    return base64.urlsafe_b64encode(url.encode()).decode()
+
+def check_url_safety(url):
+    """Checks if the URL exists in Firestore and returns its status."""
+    encoded_url = encode_url(url)
+    existing_doc = db.collection("urls").document(encoded_url).get()
+
+    if existing_doc.exists:
+        return existing_doc.to_dict().get("status", "Unknown")
+    else:
+        return "Not found in database"
+
+
