@@ -7,14 +7,19 @@ from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
-API_KEY = os.getenv("GOOGLE_SAFE_BROWSING_API_KEY")
-FIREBASE_CREDENTIALS = os.getenv("FIREBASE_CREDENTIALS")
+
+# Set Firebase credentials path
+FIREBASE_CREDENTIALS = "C:/Users/SHRADHA/OneDrive/Desktop/Project_file/serviceAccountKey.json"
+
+if not FIREBASE_CREDENTIALS:
+    raise ValueError("❌ Firebase credentials not found! Check your .env file or set the correct path.")
 
 # Initialize Firebase only if not already initialized
 if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CREDENTIALS)
     firebase_admin.initialize_app(cred)
 
+# Initialize Firestore
 db = firestore.client()
 
 def encode_url(url):
@@ -59,6 +64,12 @@ def get_url_status_from_firestore(url):
 
 def check_url_with_api(url):
     """Checks the URL using Google Safe Browsing API if not found in Firestore."""
+    API_KEY = os.getenv("GOOGLE_SAFE_BROWSING_API_KEY")
+
+    if not API_KEY:
+        print("❌ Google Safe Browsing API Key not found! Please check your .env file.")
+        return "error"
+
     try:
         normalized_url = normalize_url(url)
         API_URL = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={API_KEY}"
