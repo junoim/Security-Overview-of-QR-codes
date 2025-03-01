@@ -3,78 +3,106 @@ from firebase_admin import credentials, firestore
 import requests
 import urllib.parse
 import os
+from dotenv import load_dotenv
 
-# Initialize Firebase
+# Load environment variables
+load_dotenv()
+API_KEY = os.getenv("GOOGLE_SAFE_BROWSING_API_KEY")
+FIREBASE_CREDENTIALS = os.getenv("FIREBASE_CREDENTIALS")
+
+# Initialize Firebase only if not already initialized
 if not firebase_admin._apps:
-    cred = credentials.Certificate("C:/Users/SHRADHA/OneDrive/Desktop/Project_file/serviceAccountKey.json")
+    cred = credentials.Certificate(FIREBASE_CREDENTIALS)
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-# Secure API Key Storage
-API_KEY = os.getenv("GOOGLE_SAFE_BROWSING_API_KEY")
-
 def encode_url(url):
-    """Encodes a URL safely for Firestore document names."""
+    """Encodes URL for Firestore-safe document names."""
     return urllib.parse.quote(url, safe="")
 
-def add_url_to_firestore(url, status):
-    """Adds a URL with its safety status to Firestore."""
-    encoded_url = encode_url(url)
-    db.collection("urls").document(encoded_url).set({"status": status})
-    print(f"✅ URL {url} added successfully as {encoded_url}!")
+def decode_url(encoded_url):
+    """Decodes Firestore document ID back to a readable URL."""
+    return urllib.parse.unquote(encoded_url)
 
-def check_url_in_firestore(url):
-    """Checks if a URL is already stored in Firestore."""
-    encoded_url = encode_url(url)
-    doc = db.collection("urls").document(encoded_url).get()
-    
-    if doc.exists:
-        status = doc.to_dict().get("status", "Unknown")
-        print(f"📌 {url} -> Found in database as {status}")
-        return status
-    else:
-        print(f"🔍 {url} -> Not found in database")
+def normalize_url(url):
+    """Normalizes URL to avoid duplicate entries with different formats."""
+    parsed_url = urllib.parse.urlparse(url)
+    return f"{parsed_url.scheme}://{parsed_url.netloc}".lower()  # Removes paths, queries, etc.
+
+def add_url_to_firestore(url, status):
+    """Stores the URL under safe or malicious category in Firestore."""
+    try:
+        normalized_url = normalize_url(url)
+        encoded_url = encode_url(normalized_url)
+        collection_ref = db.collection("urls").document(status).collection("entries")
+        collection_ref.document(encoded_url).set({"status": status})
+        print(f"✅ URL {normalized_url} added successfully under {status} category!")
+    except Exception as e:
+        print(f"❌ Firestore error: {e}")
+
+def get_url_status_from_firestore(url):
+    """Checks if the URL exists in Firestore under safe or malicious category."""
+    try:
+        normalized_url = normalize_url(url)
+        encoded_url = encode_url(normalized_url)
+        
+        for status in ["safe", "malicious"]:
+            doc_ref = db.collection("urls").document(status).collection("entries").document(encoded_url)
+            doc = doc_ref.get()
+            if doc.exists:
+                return status
         return None
+    except Exception as e:
+        print(f"❌ Firestore lookup error: {e}")
+        return None
+
+def check_url_with_api(url):
+    """Checks the URL using Google Safe Browsing API if not found in Firestore."""
+    try:
+        normalized_url = normalize_url(url)
+        API_URL = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={API_KEY}"
+        
+        payload = {
+            "client": {"clientId": "your_project_name", "clientVersion": "1.0"},
+            "threatInfo": {
+                "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE"],
+                "platformTypes": ["ANY_PLATFORM"],
+                "threatEntryTypes": ["URL"],
+                "threatEntries": [{"url": normalized_url}]
+            }
+        }
+
+        headers = {"Content-Type": "application/json"}
+        response = requests.post(API_URL, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            result = response.json()
+            if "matches" in result:
+                return "malicious"
+            else:
+                return "safe"
+        else:
+            print(f"⚠️ API request failed: {response.status_code}, {response.text}")
+            return "unknown"
+
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Network error: {e}")
+        return "error"
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+        return "error"
 
 def check_url_safety(url):
     """Checks URL safety: First in Firestore, then Google Safe Browsing API if not found."""
-    status = check_url_in_firestore(url)
-    if status is not None:
-        return status  # ✅ If found in Firestore, return existing status.
-
-    # Call Google Safe Browsing API
-    api_url = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={API_KEY}"
-    payload = {
-        "client": {"clientId": "your_project", "clientVersion": "1.0"},
-        "threatInfo": {
-            "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE"],
-            "platformTypes": ["ANY_PLATFORM"],
-            "threatEntryTypes": ["URL"],
-            "threatEntries": [{"url": url}]
-        }
-    }
-
-    response = requests.post(api_url, json=payload)
-    result = response.json()
-
-    if "matches" in result:
-        status = "unsafe"
-        print(f"⚠️ ALERT: {url} is MALICIOUS!")
-    else:
-        status = "safe"
-        print(f"✅ SAFE: {url}")
-
-    # Store the result in Firestore for future reference
-    add_url_to_firestore(url, status)
-    return status
-
-# Function to test adding and checking URLs
-if __name__ == "__main__":
-    test_urls = [
-        "https://example.com",
-        "http://malicious-site.com"
-    ]
+    status = get_url_status_from_firestore(url)
+    if status:
+        print(f"📌 {url} found in database as {status}")
+        return status
     
-    for url in test_urls:
-        check_url_safety(url)
+    print(f"🔍 {url} not found in database. Checking Google Safe Browsing API...")
+    status = check_url_with_api(url)
+
+    if status != "error":
+        add_url_to_firestore(url, status)  # Store the result in Firestore
+    return status
