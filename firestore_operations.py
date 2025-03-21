@@ -21,6 +21,14 @@ if not firebase_admin._apps:
 
 # Initialize Firestore
 db = firestore.client()
+def check_url_safety(url):
+    """check if a URL is safe or malicious from the firestore database."""
+    collection_ref=db.collection("qr_urls")
+    query=collection_ref.where("url","==",url).stream()
+    for doc in query:
+        data=doc.to_dict()
+        return data.get("status", "unknown")  # "safe" or "malicious"
+    return "unknown" # if url is not found in firestore
 
 def encode_url(url):
     """Encodes URL for Firestore-safe document names."""
