@@ -23,7 +23,7 @@ if not firebase_admin._apps:
 db = firestore.client()
 def check_url_safety(url):
     """check if a URL is safe or malicious from the firestore database."""
-    collection_ref=db.collection("qr_urls")
+    collection_ref=db.collection("url")
     query=collection_ref.where("url","==",url).stream()
     for doc in query:
         data=doc.to_dict()
