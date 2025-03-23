@@ -1,17 +1,25 @@
-from firestore_operations import add_qr_code, get_qr_code, update_qr_code, delete_qr_code
+from firestore_operations import add_url_to_firestore
 
-# Sample QR Code Data
-qr_id = "12345"
-qr_data = {"name": "Test QR", "url": "https://example.com", "scanned": 0}
+# Malicious URLs (except one that API should detect)
+malicious_urls = [
+    "https://bit.ly/3abcXYZ",
+    "https://xn--pple-43d.com",
+    "https://secure-login-verify.com"
+]
 
-# 1️⃣ Add a QR Code
-add_qr_code(qr_id, qr_data)
+# Safe URLs
+safe_urls = [
+    "https://www.example.com/redirect?url=https://www.safe-site.com",
+    "https://www.example.com/%7Euser/profile",
+    "https://mail.service.example.com"
+]
 
-# 2️⃣ Retrieve the QR Code
-get_qr_code(qr_id)
+# Add malicious URLs to Firestore
+for url in malicious_urls:
+    add_url_to_firestore(url, "malicious")
 
-# 3️⃣ Update the QR Code
-update_qr_code(qr_id, {"scanned": 5})
+# Add safe URLs to Firestore
+for url in safe_urls:
+    add_url_to_firestore(url, "safe")
 
-# 4️⃣ Delete the QR Code
-delete_qr_code(qr_id)
+print("✅ Firestore updated with tricky URLs.")
